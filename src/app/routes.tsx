@@ -18,5 +18,5 @@ export const router = createBrowserRouter(
       ],
     },
   ],
-  { basename: "/fittrack-app" }  // Add this line
+  { basename: "/fittrack-app/" }  // Add this line
 );
