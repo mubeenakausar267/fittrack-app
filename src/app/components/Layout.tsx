@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation } from "react-router";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import { Home, UtensilsCrossed, Dumbbell, Sparkles } from "lucide-react";
 
 export function Layout() {
