@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
 import { Dashboard } from "./components/Dashboard";
 import { WeeklyMenu } from "./components/WeeklyMenu";
 import { WorkoutPlans } from "./components/WorkoutPlans";
@@ -18,5 +18,5 @@ export const router = createBrowserRouter(
       ],
     },
   ],
-  { basename: "/fittrack-app/" }  // Add this line
+  { basename: "/fittrack-app" }
 );
