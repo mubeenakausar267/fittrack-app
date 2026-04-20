@@ -23,7 +23,7 @@ interface Suggestion {
 export function AISuggestions() {
   const [loading, setLoading] = useState(false);
   const [mealType, setMealType] = useState<"general" | "american" | "indian" | "search">("general");
-  const [mealCategory, setMealCategory] = useState<"all" | "chicken" | "salad" | "vegetarian">("all");
+  const [mealCategory, setMealCategory] = useState<"all" | "non-veg" | "salad" | "vegetarian">("all");
   const [ingredientInput, setIngredientInput] = useState("");
   const [selectedRecipe, setSelectedRecipe] = useState<Suggestion | null>(null);
   const [suggestedRecipes, setSuggestedRecipes] = useState<Suggestion[]>([]);
@@ -650,7 +650,7 @@ export function AISuggestions() {
     
     if (mealCategory === "all") {
       allRecipes = [...americanChickenSuggestions, ...indianChickenSuggestions, ...saladRecipes, ...vegetarianRecipes];
-    } else if (mealCategory === "chicken") {
+    } else if (mealCategory === "non-veg") {
       allRecipes = [...americanChickenSuggestions, ...indianChickenSuggestions];
     } else if (mealCategory === "salad") {
       allRecipes = [...saladRecipes];
@@ -753,11 +753,11 @@ export function AISuggestions() {
                       All
                     </Button>
                     <Button
-                      onClick={() => setMealCategory("chicken")}
-                      variant={mealCategory === "chicken" ? "default" : "outline"}
+                      onClick={() => setMealCategory("non-veg")}
+                      variant={mealCategory === "non-veg" ? "default" : "outline"}
                       size="sm"
                     >
-                      🍗 Chicken
+                      🍗 Non Veg
                     </Button>
                     <Button
                       onClick={() => setMealCategory("salad")}
