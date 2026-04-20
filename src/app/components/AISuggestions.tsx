@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { Sparkles, RefreshCw, UtensilsCrossed, Dumbbell, Lightbulb } from "lucide-react";
+import { Sparkles, RefreshCw, UtensilsCrossed, Dumbbell, Lightbulb, Globe } from "lucide-react";
 
 interface Suggestion {
   category: string;
@@ -9,13 +9,15 @@ interface Suggestion {
   description: string;
   icon: any;
   color: string;
+  cuisine?: string;
 }
 
 export function AISuggestions() {
   const [loading, setLoading] = useState(false);
+  const [mealType, setMealType] = useState<"general" | "american" | "indian">("general");
 
-  // Mock AI suggestions
-  const mealSuggestions: Suggestion[] = [
+  // Mock AI suggestions - General meals
+  const generalMealSuggestions: Suggestion[] = [
     {
       category: "Breakfast",
       title: "Protein-Packed Morning",
@@ -47,6 +49,122 @@ export function AISuggestions() {
         "Apple slices with almond butter and a handful of walnuts. Perfect combination of complex carbs, healthy fats, and protein.",
       icon: UtensilsCrossed,
       color: "from-purple-500 to-pink-500",
+    },
+  ];
+
+  // American Chicken Meals
+  const americanChickenSuggestions: Suggestion[] = [
+    {
+      category: "Lunch",
+      title: "Spicy Buffalo Chicken",
+      description:
+        "Crispy chicken wings or tenders coated in buffalo sauce served with celery, carrots, and ranch dip. High in protein with bold flavors. Pairs well with sweet potato fries.",
+      icon: UtensilsCrossed,
+      color: "from-red-500 to-orange-500",
+      cuisine: "American",
+    },
+    {
+      category: "Dinner",
+      title: "Southern Fried Chicken",
+      description:
+        "Golden-fried chicken breast with buttermilk coating, served with collard greens and cornbread. A classic comfort meal that's protein-rich and satisfying.",
+      icon: UtensilsCrossed,
+      color: "from-amber-600 to-yellow-500",
+      cuisine: "American",
+    },
+    {
+      category: "Lunch",
+      title: "Grilled Chicken Sandwich",
+      description:
+        "Grilled chicken breast on whole wheat bread with lettuce, tomato, and avocado. Light yet filling option with healthy fats and lean protein.",
+      icon: UtensilsCrossed,
+      color: "from-green-600 to-emerald-500",
+      cuisine: "American",
+    },
+    {
+      category: "Dinner",
+      title: "Chicken Fried Rice",
+      description:
+        "Stir-fried chicken with brown rice, mixed vegetables, eggs, and low-sodium soy sauce. Quick to prepare and loaded with balanced macros.",
+      icon: UtensilsCrossed,
+      color: "from-amber-500 to-orange-600",
+      cuisine: "American",
+    },
+    {
+      category: "Dinner",
+      title: "BBQ Grilled Chicken",
+      description:
+        "Marinated chicken breast grilled to perfection with sugar-free BBQ sauce. Serve with quinoa and roasted vegetables for a complete meal.",
+      icon: UtensilsCrossed,
+      color: "from-orange-600 to-red-600",
+      cuisine: "American",
+    },
+    {
+      category: "Snack",
+      title: "Chicken Tenders with Hummus",
+      description:
+        "Baked chicken tenders (healthier than fried) served with hummus or Greek yogurt dip. Great high-protein snack or meal prep option.",
+      icon: UtensilsCrossed,
+      color: "from-blue-500 to-cyan-500",
+      cuisine: "American",
+    },
+  ];
+
+  // Indian Chicken Meals
+  const indianChickenSuggestions: Suggestion[] = [
+    {
+      category: "Dinner",
+      title: "Butter Chicken (Murgh Makhani)",
+      description:
+        "Tender chicken in a creamy tomato-based sauce with butter and cream. Serve with brown rice or naan. Rich in flavor with moderate spice levels.",
+      icon: UtensilsCrossed,
+      color: "from-orange-500 to-red-600",
+      cuisine: "Indian",
+    },
+    {
+      category: "Dinner",
+      title: "Chicken Tikka Masala",
+      description:
+        "Marinated chicken cooked in tandoor-style oven, served in a smooth coconut curry sauce. High protein with aromatic Indian spices like cumin and garam masala.",
+      icon: UtensilsCrossed,
+      color: "from-red-500 to-pink-600",
+      cuisine: "Indian",
+    },
+    {
+      category: "Lunch",
+      title: "Tandoori Grilled Chicken",
+      description:
+        "Chicken marinated in yogurt and tandoori spices, then grilled to perfection. Lean protein option with bold Indian flavors. Serve with cucumber raita.",
+      icon: UtensilsCrossed,
+      color: "from-amber-600 to-orange-500",
+      cuisine: "Indian",
+    },
+    {
+      category: "Dinner",
+      title: "Spiced Chicken Curry",
+      description:
+        "Tender chicken cooked in a rich curry sauce with turmeric, coriander, and fenugreek. Serve with basmati rice or roti. Packed with anti-inflammatory spices.",
+      icon: UtensilsCrossed,
+      color: "from-yellow-600 to-orange-600",
+      cuisine: "Indian",
+    },
+    {
+      category: "Lunch",
+      title: "Chicken Biryani",
+      description:
+        "Aromatic rice layered with spiced chicken, then slow-cooked together. Complete meal with carbs and protein in one dish. Flavored with saffron and cardamom.",
+      icon: UtensilsCrossed,
+      color: "from-amber-500 to-yellow-600",
+      cuisine: "Indian",
+    },
+    {
+      category: "Dinner",
+      title: "Chettinad Chicken Pepper Fry",
+      description:
+        "Chicken cooked with black pepper, coconut, and Indian spices. Dry preparation with intense flavors and minimal sauce. High protein, low carb option.",
+      icon: UtensilsCrossed,
+      color: "from-gray-700 to-orange-700",
+      cuisine: "Indian",
     },
   ];
 
@@ -119,6 +237,20 @@ export function AISuggestions() {
     }, 1000);
   };
 
+  // Get meals based on selected type
+  const getMealSuggestions = () => {
+    switch (mealType) {
+      case "american":
+        return americanChickenSuggestions;
+      case "indian":
+        return indianChickenSuggestions;
+      default:
+        return generalMealSuggestions;
+    }
+  };
+
+  const currentMeals = getMealSuggestions();
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -134,12 +266,42 @@ export function AISuggestions() {
 
       {/* Meal Suggestions */}
       <div>
-        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-          <UtensilsCrossed className="w-5 h-5" />
-          Meal Suggestions
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
+            <UtensilsCrossed className="w-5 h-5" />
+            Meal Suggestions
+          </h2>
+        </div>
+
+        {/* Meal Type Selector */}
+        <div className="flex gap-2 mb-6">
+          <Button
+            onClick={() => setMealType("general")}
+            variant={mealType === "general" ? "default" : "outline"}
+            className="gap-2"
+          >
+            General Meals
+          </Button>
+          <Button
+            onClick={() => setMealType("american")}
+            variant={mealType === "american" ? "default" : "outline"}
+            className="gap-2"
+          >
+            <Globe className="w-4 h-4" />
+            American Chicken
+          </Button>
+          <Button
+            onClick={() => setMealType("indian")}
+            variant={mealType === "indian" ? "default" : "outline"}
+            className="gap-2"
+          >
+            <Globe className="w-4 h-4" />
+            Indian Chicken
+          </Button>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {mealSuggestions.map((suggestion, index) => {
+          {currentMeals.map((suggestion, index) => {
             const Icon = suggestion.icon;
             return (
               <Card key={index} className="hover:shadow-md transition-shadow">
@@ -150,9 +312,10 @@ export function AISuggestions() {
                     >
                       <Icon className="w-5 h-5 text-white" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <span className="text-xs text-gray-500 uppercase tracking-wide">
                         {suggestion.category}
+                        {suggestion.cuisine && ` • ${suggestion.cuisine}`}
                       </span>
                       <CardTitle className="text-lg">{suggestion.title}</CardTitle>
                     </div>

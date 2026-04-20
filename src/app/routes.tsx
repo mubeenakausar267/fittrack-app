@@ -3,6 +3,7 @@ import { Dashboard } from "./components/Dashboard";
 import { WeeklyMenu } from "./components/WeeklyMenu";
 import { WorkoutPlans } from "./components/WorkoutPlans";
 import { AISuggestions } from "./components/AISuggestions";
+import { GroceryList } from "./components/GroceryList";
 import { Layout } from "./components/Layout";
 
 export const router = createBrowserRouter(
@@ -15,6 +16,7 @@ export const router = createBrowserRouter(
         { path: "menu", Component: WeeklyMenu },
         { path: "workout", Component: WorkoutPlans },
         { path: "suggestions", Component: AISuggestions },
+        { path: "grocery", Component: GroceryList },
       ],
     },
   ],

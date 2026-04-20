@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { UtensilsCrossed, Dumbbell, Sparkles, Calendar, TrendingUp } from "lucide-react";
+import { UtensilsCrossed, Dumbbell, Sparkles, Calendar, TrendingUp, ShoppingCart } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
@@ -66,6 +66,13 @@ export function Dashboard() {
       link: "/suggestions",
       color: "from-purple-500 to-pink-500",
     },
+    {
+      title: "Grocery List",
+      description: "Organize your weekly shopping",
+      icon: ShoppingCart,
+      link: "/grocery",
+      color: "from-green-500 to-emerald-500",
+    },
   ];
 
   return (
@@ -127,7 +134,7 @@ export function Dashboard() {
       {/* Quick Actions */}
       <div>
         <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
