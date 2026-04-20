@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { Sparkles, RefreshCw, UtensilsCrossed, Dumbbell, Lightbulb, Globe } from "lucide-react";
+import { Input } from "./ui/input";
+import { Sparkles, RefreshCw, UtensilsCrossed, Dumbbell, Lightbulb, Globe, Search } from "lucide-react";
 
 interface Suggestion {
   category: string;
@@ -10,11 +11,14 @@ interface Suggestion {
   icon: any;
   color: string;
   cuisine?: string;
+  ingredients?: string[];
 }
 
 export function AISuggestions() {
   const [loading, setLoading] = useState(false);
-  const [mealType, setMealType] = useState<"general" | "american" | "indian">("general");
+  const [mealType, setMealType] = useState<"general" | "american" | "indian" | "search">("general");
+  const [ingredientInput, setIngredientInput] = useState("");
+  const [suggestedRecipes, setSuggestedRecipes] = useState<Suggestion[]>([]);
 
   // Mock AI suggestions - General meals
   const generalMealSuggestions: Suggestion[] = [
@@ -62,6 +66,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-red-500 to-orange-500",
       cuisine: "American",
+      ingredients: ["chicken", "buffalo sauce", "celery", "carrots", "ranch"],
     },
     {
       category: "Dinner",
@@ -71,6 +76,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-amber-600 to-yellow-500",
       cuisine: "American",
+      ingredients: ["chicken", "buttermilk", "flour", "collard greens", "cornbread"],
     },
     {
       category: "Lunch",
@@ -80,6 +86,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-green-600 to-emerald-500",
       cuisine: "American",
+      ingredients: ["chicken", "bread", "lettuce", "tomato", "avocado"],
     },
     {
       category: "Dinner",
@@ -89,6 +96,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-amber-500 to-orange-600",
       cuisine: "American",
+      ingredients: ["chicken", "rice", "eggs", "vegetables", "soy sauce"],
     },
     {
       category: "Dinner",
@@ -98,6 +106,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-orange-600 to-red-600",
       cuisine: "American",
+      ingredients: ["chicken", "bbq sauce", "quinoa", "vegetables"],
     },
     {
       category: "Snack",
@@ -107,6 +116,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-blue-500 to-cyan-500",
       cuisine: "American",
+      ingredients: ["chicken", "hummus", "yogurt"],
     },
   ];
 
@@ -120,6 +130,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-orange-500 to-red-600",
       cuisine: "Indian",
+      ingredients: ["chicken", "butter", "cream", "tomato", "rice", "naan"],
     },
     {
       category: "Dinner",
@@ -129,6 +140,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-red-500 to-pink-600",
       cuisine: "Indian",
+      ingredients: ["chicken", "yogurt", "coconut", "cumin", "garam masala", "tomato"],
     },
     {
       category: "Lunch",
@@ -138,6 +150,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-amber-600 to-orange-500",
       cuisine: "Indian",
+      ingredients: ["chicken", "yogurt", "tandoori spice", "cucumber", "lime"],
     },
     {
       category: "Dinner",
@@ -147,6 +160,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-yellow-600 to-orange-600",
       cuisine: "Indian",
+      ingredients: ["chicken", "turmeric", "coriander", "rice", "onion", "garlic"],
     },
     {
       category: "Lunch",
@@ -156,6 +170,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-amber-500 to-yellow-600",
       cuisine: "Indian",
+      ingredients: ["chicken", "rice", "saffron", "cardamom", "onion", "yogurt"],
     },
     {
       category: "Dinner",
@@ -165,6 +180,7 @@ export function AISuggestions() {
       icon: UtensilsCrossed,
       color: "from-gray-700 to-orange-700",
       cuisine: "Indian",
+      ingredients: ["chicken", "black pepper", "coconut", "curry leaves", "onion"],
     },
   ];
 
@@ -249,7 +265,40 @@ export function AISuggestions() {
     }
   };
 
-  const currentMeals = getMealSuggestions();
+  // Search recipes by ingredients
+  const searchRecipesByIngredients = (ingredientStr: string) => {
+    if (!ingredientStr.trim()) {
+      setSuggestedRecipes([]);
+      return;
+    }
+
+    const ingredients = ingredientStr
+      .toLowerCase()
+      .split(",")
+      .map((ing) => ing.trim())
+      .filter((ing) => ing.length > 0);
+
+    // Combine all recipes
+    const allRecipes = [...americanChickenSuggestions, ...indianChickenSuggestions];
+
+    // Find matching recipes
+    const matchedRecipes = allRecipes.filter((recipe) => {
+      if (!recipe.ingredients) return false;
+      return ingredients.some((ing) =>
+        recipe.ingredients!.some((recipeIng) => recipeIng.toLowerCase().includes(ing))
+      );
+    });
+
+    // Separate by cuisine
+    const americanMatches = matchedRecipes.filter((r) => r.cuisine === "American");
+    const indianMatches = matchedRecipes.filter((r) => r.cuisine === "Indian");
+
+    // Take 2 from each cuisine
+    const suggestions = [...americanMatches.slice(0, 2), ...indianMatches.slice(0, 2)];
+    setSuggestedRecipes(suggestions);
+  };
+
+  const currentMeals = mealType === "search" ? suggestedRecipes : getMealSuggestions();
 
   return (
     <div className="space-y-6">
@@ -274,7 +323,7 @@ export function AISuggestions() {
         </div>
 
         {/* Meal Type Selector */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-2 mb-6 flex-wrap">
           <Button
             onClick={() => setMealType("general")}
             variant={mealType === "general" ? "default" : "outline"}
@@ -298,7 +347,46 @@ export function AISuggestions() {
             <Globe className="w-4 h-4" />
             Indian Chicken
           </Button>
+          <Button
+            onClick={() => setMealType("search")}
+            variant={mealType === "search" ? "default" : "outline"}
+            className="gap-2"
+          >
+            <Search className="w-4 h-4" />
+            Search by Ingredients
+          </Button>
         </div>
+
+        {/* Ingredient Search */}
+        {mealType === "search" && (
+          <Card className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <CardContent className="pt-6">
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-gray-700">
+                  Enter ingredients (comma-separated)
+                </label>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="e.g., chicken, rice, tomato, yogurt"
+                    value={ingredientInput}
+                    onChange={(e) => setIngredientInput(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button
+                    onClick={() => searchRecipesByIngredients(ingredientInput)}
+                    className="gap-2"
+                  >
+                    <Search className="w-4 h-4" />
+                    Search
+                  </Button>
+                </div>
+                <p className="text-xs text-gray-600">
+                  💡 Tip: Returns 2 Indian + 2 American recipes based on your ingredients
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {currentMeals.map((suggestion, index) => {
