@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Sparkles, RefreshCw, UtensilsCrossed, Dumbbell, Lightbulb, Globe, Search, Clock, Users } from "lucide-react";
+import { Sparkles, RefreshCw, UtensilsCrossed, Dumbbell, Lightbulb, Globe, Search, Clock, Users, Leaf } from "lucide-react";
 
 interface Suggestion {
   category: string;
+  mealCategory?: string;
   title: string;
   description: string;
   icon: any;
@@ -22,6 +23,7 @@ interface Suggestion {
 export function AISuggestions() {
   const [loading, setLoading] = useState(false);
   const [mealType, setMealType] = useState<"general" | "american" | "indian" | "search">("general");
+  const [mealCategory, setMealCategory] = useState<"all" | "chicken" | "salad" | "vegetarian">("all");
   const [ingredientInput, setIngredientInput] = useState("");
   const [selectedRecipe, setSelectedRecipe] = useState<Suggestion | null>(null);
   const [suggestedRecipes, setSuggestedRecipes] = useState<Suggestion[]>([]);
@@ -336,6 +338,219 @@ export function AISuggestions() {
     },
   ];
 
+  // Salad Recipes
+  const saladRecipes: Suggestion[] = [
+    {
+      category: "Salad",
+      mealCategory: "salad",
+      title: "Grilled Chicken Caesar Salad",
+      description: "Crispy romaine lettuce with grilled chicken, parmesan, and homemade Caesar dressing.",
+      icon: UtensilsCrossed,
+      color: "from-green-600 to-emerald-500",
+      cuisine: "American",
+      ingredients: ["chicken", "lettuce", "parmesan", "croutons"],
+      prepTime: "10 min",
+      cookTime: "12 min",
+      servings: "2",
+      fullIngredients: [
+        "8 oz chicken breast",
+        "4 cups romaine lettuce, chopped",
+        "¼ cup parmesan cheese, grated",
+        "½ cup croutons",
+        "2 tbsp olive oil",
+        "1 tbsp lemon juice",
+        "1 clove garlic, minced",
+        "½ tsp Dijon mustard",
+        "Salt and pepper to taste",
+      ],
+      steps: [
+        "Season chicken with salt and pepper. Grill for 6 minutes per side until cooked through.",
+        "Let chicken rest for 2 minutes, then slice into strips.",
+        "Whisk together olive oil, lemon juice, garlic, and mustard for dressing.",
+        "Toss lettuce with dressing in a large bowl.",
+        "Top with sliced chicken, parmesan, and croutons.",
+        "Serve immediately.",
+      ],
+    },
+    {
+      category: "Salad",
+      mealCategory: "salad",
+      title: "Mediterranean Chickpea Salad",
+      description: "Vibrant salad with chickpeas, vegetables, feta, and olive oil dressing.",
+      icon: UtensilsCrossed,
+      color: "from-blue-500 to-cyan-500",
+      cuisine: "American",
+      ingredients: ["chickpeas", "tomato", "cucumber", "feta"],
+      prepTime: "15 min",
+      cookTime: "0 min",
+      servings: "4",
+      fullIngredients: [
+        "2 cans chickpeas, drained",
+        "2 tomatoes, diced",
+        "1 cucumber, diced",
+        "½ red onion, thinly sliced",
+        "¾ cup feta cheese, crumbled",
+        "¼ cup Kalamata olives",
+        "3 tbsp olive oil",
+        "1 tbsp red wine vinegar",
+        "1 tsp dried oregano",
+        "Salt and pepper to taste",
+      ],
+      steps: [
+        "Combine chickpeas, tomatoes, cucumber, and red onion in a large bowl.",
+        "Add feta and olives.",
+        "Whisk together olive oil, vinegar, oregano, salt, and pepper.",
+        "Pour dressing over salad and toss gently.",
+        "Let sit for 5 minutes before serving to allow flavors to meld.",
+      ],
+    },
+    {
+      category: "Salad",
+      mealCategory: "salad",
+      title: "Thai Mango Chicken Salad",
+      description: "Spicy and sweet salad with mango, chicken, and peanut dressing.",
+      icon: UtensilsCrossed,
+      color: "from-yellow-500 to-orange-500",
+      cuisine: "Indian",
+      ingredients: ["chicken", "mango", "peanut", "lime"],
+      prepTime: "15 min",
+      cookTime: "10 min",
+      servings: "2",
+      fullIngredients: [
+        "8 oz chicken breast, sliced",
+        "2 cups mixed greens",
+        "1 mango, diced",
+        "½ red bell pepper, sliced",
+        "¼ cup peanuts, crushed",
+        "2 tbsp lime juice",
+        "2 tbsp peanut butter",
+        "1 tbsp fish sauce",
+        "1 tsp red chili flakes",
+        "Fresh cilantro",
+      ],
+      steps: [
+        "Grill or pan-fry chicken until cooked through (about 6-7 minutes). Slice into strips.",
+        "Whisk together lime juice, peanut butter, fish sauce, and chili flakes for dressing.",
+        "Arrange greens on a plate. Top with mango, bell pepper, and chicken.",
+        "Drizzle with dressing and sprinkle crushed peanuts on top.",
+        "Garnish with fresh cilantro. Serve immediately.",
+      ],
+    },
+  ];
+
+  // Vegetarian Recipes
+  const vegetarianRecipes: Suggestion[] = [
+    {
+      category: "Vegetarian",
+      mealCategory: "vegetarian",
+      title: "Paneer Tikka Masala",
+      description: "Soft paneer cheese in a creamy tomato-based curry sauce with aromatic spices.",
+      icon: UtensilsCrossed,
+      color: "from-orange-500 to-red-600",
+      cuisine: "Indian",
+      ingredients: ["paneer", "tomato", "cream", "spices"],
+      prepTime: "15 min",
+      cookTime: "25 min",
+      servings: "4",
+      fullIngredients: [
+        "1 lb paneer cheese, cubed",
+        "½ cup Greek yogurt",
+        "2 tbsp garam masala",
+        "1 tsp cumin",
+        "½ tsp chili powder",
+        "1 can (14 oz) coconut milk",
+        "1 can (15 oz) tomato sauce",
+        "½ cup heavy cream",
+        "3 cloves garlic, minced",
+        "1 tbsp ginger, minced",
+        "2 tbsp oil",
+        "Salt to taste",
+      ],
+      steps: [
+        "Marinate paneer in yogurt mixed with 1 tbsp garam masala and chili powder for 10 minutes.",
+        "Heat oil in a pan and lightly pan-fry paneer pieces until golden. Set aside.",
+        "Sauté garlic and ginger in the same pan until fragrant.",
+        "Add tomato sauce, coconut milk, remaining garam masala, and cumin.",
+        "Simmer for 10 minutes. Stir in heavy cream.",
+        "Add cooked paneer and simmer for 5 more minutes.",
+        "Season with salt and serve with rice or naan.",
+      ],
+    },
+    {
+      category: "Vegetarian",
+      mealCategory: "vegetarian",
+      title: "Mushroom Stir-Fry",
+      description: "Savory mushrooms with bell peppers and soy sauce over rice.",
+      icon: UtensilsCrossed,
+      color: "from-amber-600 to-orange-500",
+      cuisine: "American",
+      ingredients: ["mushroom", "bell pepper", "garlic", "soy sauce"],
+      prepTime: "10 min",
+      cookTime: "12 min",
+      servings: "2",
+      fullIngredients: [
+        "1 lb mixed mushrooms, sliced",
+        "2 bell peppers (red and yellow), sliced",
+        "3 cloves garlic, minced",
+        "2 tbsp vegetable oil",
+        "3 tbsp low-sodium soy sauce",
+        "1 tbsp sesame oil",
+        "1 tsp ginger, minced",
+        "2 green onions, sliced",
+        "Sesame seeds for garnish",
+      ],
+      steps: [
+        "Heat vegetable oil in a wok or large skillet over high heat.",
+        "Add garlic and ginger, cook for 30 seconds until fragrant.",
+        "Add mushrooms and stir-fry for 4-5 minutes until golden.",
+        "Add bell peppers and continue stir-frying for 3-4 minutes.",
+        "Pour in soy sauce and sesame oil. Toss well.",
+        "Cook for 1 more minute. Top with green onions and sesame seeds.",
+        "Serve over rice.",
+      ],
+    },
+    {
+      category: "Vegetarian",
+      mealCategory: "vegetarian",
+      title: "Vegetable Biryani",
+      description: "Aromatic rice with mixed vegetables, yogurt, and Indian spices.",
+      icon: UtensilsCrossed,
+      color: "from-purple-500 to-pink-500",
+      cuisine: "Indian",
+      ingredients: ["rice", "vegetables", "yogurt", "spices"],
+      prepTime: "15 min",
+      cookTime: "30 min",
+      servings: "4",
+      fullIngredients: [
+        "2 cups basmati rice",
+        "1 cup mixed vegetables (peas, carrots, cauliflower)",
+        "1 cup Greek yogurt",
+        "3 tbsp ghee or oil",
+        "2 onions, sliced",
+        "3 cloves garlic, minced",
+        "1 tbsp ginger, minced",
+        "1 tsp cardamom pods",
+        "1 tsp cinnamon stick",
+        "4 cloves",
+        "½ tsp saffron",
+        "2 tsp garam masala",
+        "2 cups water",
+        "Salt to taste",
+      ],
+      steps: [
+        "Soak rice for 30 minutes. Boil in salted water until 70% cooked. Drain.",
+        "Heat ghee in a pot. Fry onions until golden. Remove half for garnish.",
+        "Add garlic and ginger to remaining onions, cook for 1 minute.",
+        "Add vegetables and cook for 2 minutes.",
+        "Mix yogurt with garam masala and add to the pot.",
+        "Layer half the rice over vegetables, then remaining vegetables, then remaining rice.",
+        "Sprinkle saffron on top. Cover and cook on high heat for 2 minutes (until steam forms).",
+        "Reduce heat to low and cook covered for 15 minutes.",
+        "Let rest for 5 minutes before opening. Fluff and serve.",
+      ],
+    },
+  ];
+
   const workoutSuggestions: Suggestion[] = [
     {
       category: "Strength",
@@ -417,7 +632,7 @@ export function AISuggestions() {
     }
   };
 
-  // Search recipes by ingredients
+  // Search recipes by ingredients and category
   const searchRecipesByIngredients = (ingredientStr: string) => {
     if (!ingredientStr.trim()) {
       setSuggestedRecipes([]);
@@ -430,8 +645,18 @@ export function AISuggestions() {
       .map((ing) => ing.trim())
       .filter((ing) => ing.length > 0);
 
-    // Combine all recipes
-    const allRecipes = [...americanChickenSuggestions, ...indianChickenSuggestions];
+    // Combine recipes based on selected category
+    let allRecipes: Suggestion[] = [];
+    
+    if (mealCategory === "all") {
+      allRecipes = [...americanChickenSuggestions, ...indianChickenSuggestions, ...saladRecipes, ...vegetarianRecipes];
+    } else if (mealCategory === "chicken") {
+      allRecipes = [...americanChickenSuggestions, ...indianChickenSuggestions];
+    } else if (mealCategory === "salad") {
+      allRecipes = [...saladRecipes];
+    } else if (mealCategory === "vegetarian") {
+      allRecipes = [...vegetarianRecipes];
+    }
 
     // Find matching recipes
     const matchedRecipes = allRecipes.filter((recipe) => {
@@ -513,27 +738,69 @@ export function AISuggestions() {
         {mealType === "search" && (
           <Card className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50">
             <CardContent className="pt-6">
-              <div className="space-y-3">
-                <label className="text-sm font-medium text-gray-700">
-                  Enter ingredients (comma-separated)
-                </label>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="e.g., chicken, rice, tomato, yogurt"
-                    value={ingredientInput}
-                    onChange={(e) => setIngredientInput(e.target.value)}
-                    className="flex-1"
-                  />
-                  <Button
-                    onClick={() => searchRecipesByIngredients(ingredientInput)}
-                    className="gap-2"
-                  >
-                    <Search className="w-4 h-4" />
-                    Search
-                  </Button>
+              <div className="space-y-4">
+                {/* Meal Category Filter */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700 block mb-2">
+                    Select meal type:
+                  </label>
+                  <div className="flex gap-2 flex-wrap">
+                    <Button
+                      onClick={() => setMealCategory("all")}
+                      variant={mealCategory === "all" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      All
+                    </Button>
+                    <Button
+                      onClick={() => setMealCategory("chicken")}
+                      variant={mealCategory === "chicken" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      🍗 Chicken
+                    </Button>
+                    <Button
+                      onClick={() => setMealCategory("salad")}
+                      variant={mealCategory === "salad" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      🥗 Salad
+                    </Button>
+                    <Button
+                      onClick={() => setMealCategory("vegetarian")}
+                      variant={mealCategory === "vegetarian" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      <Leaf className="w-4 h-4 mr-1" />
+                      Vegetarian
+                    </Button>
+                  </div>
                 </div>
+
+                {/* Ingredients Input */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Enter ingredients (comma-separated)
+                  </label>
+                  <div className="flex gap-2 mt-2">
+                    <Input
+                      placeholder="e.g., chicken, rice, tomato, yogurt"
+                      value={ingredientInput}
+                      onChange={(e) => setIngredientInput(e.target.value)}
+                      className="flex-1"
+                    />
+                    <Button
+                      onClick={() => searchRecipesByIngredients(ingredientInput)}
+                      className="gap-2"
+                    >
+                      <Search className="w-4 h-4" />
+                      Search
+                    </Button>
+                  </div>
+                </div>
+
                 <p className="text-xs text-gray-600">
-                  💡 Tip: Returns 2 Indian + 2 American recipes based on your ingredients
+                  💡 Tip: Returns recipes filtered by meal type with your ingredients. 2 from each cuisine!
                 </p>
               </div>
             </CardContent>
