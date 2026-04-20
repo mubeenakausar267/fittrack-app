@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Sparkles, RefreshCw, UtensilsCrossed, Dumbbell, Lightbulb, Globe, Search } from "lucide-react";
+import { Sparkles, RefreshCw, UtensilsCrossed, Dumbbell, Lightbulb, Globe, Search, Clock, Users } from "lucide-react";
 
 interface Suggestion {
   category: string;
@@ -12,12 +12,18 @@ interface Suggestion {
   color: string;
   cuisine?: string;
   ingredients?: string[];
+  fullIngredients?: string[];
+  steps?: string[];
+  prepTime?: string;
+  cookTime?: string;
+  servings?: string;
 }
 
 export function AISuggestions() {
   const [loading, setLoading] = useState(false);
   const [mealType, setMealType] = useState<"general" | "american" | "indian" | "search">("general");
   const [ingredientInput, setIngredientInput] = useState("");
+  const [selectedRecipe, setSelectedRecipe] = useState<Suggestion | null>(null);
   const [suggestedRecipes, setSuggestedRecipes] = useState<Suggestion[]>([]);
 
   // Mock AI suggestions - General meals
@@ -62,61 +68,129 @@ export function AISuggestions() {
       category: "Lunch",
       title: "Spicy Buffalo Chicken",
       description:
-        "Crispy chicken wings or tenders coated in buffalo sauce served with celery, carrots, and ranch dip. High in protein with bold flavors. Pairs well with sweet potato fries.",
+        "Crispy chicken wings or tenders coated in buffalo sauce served with celery, carrots, and ranch dip.",
       icon: UtensilsCrossed,
       color: "from-red-500 to-orange-500",
       cuisine: "American",
       ingredients: ["chicken", "buffalo sauce", "celery", "carrots", "ranch"],
+      prepTime: "10 min",
+      cookTime: "20 min",
+      servings: "4",
+      fullIngredients: [
+        "1.5 lbs chicken wings or tenders",
+        "¾ cup buffalo sauce",
+        "2 tbsp butter",
+        "3 celery stalks, cut into sticks",
+        "3 carrots, cut into sticks",
+        "½ cup ranch dip",
+        "Salt and pepper to taste",
+      ],
+      steps: [
+        "Preheat oven to 400°F. Pat chicken dry with paper towels.",
+        "Season chicken with salt and pepper. Bake for 15-18 minutes until cooked through.",
+        "In a bowl, mix buffalo sauce with melted butter.",
+        "Toss baked chicken in buffalo sauce mixture until well coated.",
+        "Return to oven for 2-3 minutes to caramelize.",
+        "Serve with celery, carrots, and ranch dip.",
+      ],
     },
     {
       category: "Dinner",
       title: "Southern Fried Chicken",
       description:
-        "Golden-fried chicken breast with buttermilk coating, served with collard greens and cornbread. A classic comfort meal that's protein-rich and satisfying.",
+        "Golden-fried chicken breast with buttermilk coating, served with collard greens.",
       icon: UtensilsCrossed,
       color: "from-amber-600 to-yellow-500",
       cuisine: "American",
       ingredients: ["chicken", "buttermilk", "flour", "collard greens", "cornbread"],
+      prepTime: "15 min",
+      cookTime: "25 min",
+      servings: "4",
+      fullIngredients: [
+        "4 chicken breasts",
+        "1 cup buttermilk",
+        "1 cup all-purpose flour",
+        "1 tsp paprika",
+        "1 tsp garlic powder",
+        "Salt and pepper",
+        "Oil for frying",
+        "4 cups collard greens",
+      ],
+      steps: [
+        "Marinate chicken in buttermilk for at least 30 minutes (or overnight).",
+        "Mix flour with paprika, garlic powder, salt, and pepper in a shallow bowl.",
+        "Heat oil in a deep skillet to 350°F.",
+        "Coat each chicken piece in flour mixture, shaking off excess.",
+        "Fry for 6-7 minutes per side until golden brown and internal temp reaches 165°F.",
+        "Drain on paper towels. Serve with collard greens.",
+      ],
     },
     {
       category: "Lunch",
       title: "Grilled Chicken Sandwich",
       description:
-        "Grilled chicken breast on whole wheat bread with lettuce, tomato, and avocado. Light yet filling option with healthy fats and lean protein.",
+        "Grilled chicken breast on whole wheat bread with lettuce, tomato, and avocado.",
       icon: UtensilsCrossed,
       color: "from-green-600 to-emerald-500",
       cuisine: "American",
       ingredients: ["chicken", "bread", "lettuce", "tomato", "avocado"],
+      prepTime: "5 min",
+      cookTime: "10 min",
+      servings: "2",
+      fullIngredients: [
+        "2 chicken breasts (½ lb)",
+        "2 tbsp olive oil",
+        "1 tsp Italian seasoning",
+        "2 whole wheat bread slices",
+        "2 lettuce leaves",
+        "1 tomato, sliced",
+        "½ avocado, sliced",
+        "1 tbsp mayo",
+        "Salt and pepper",
+      ],
+      steps: [
+        "Season chicken breasts with Italian seasoning, salt, and pepper.",
+        "Heat olive oil in a grill pan over medium-high heat.",
+        "Grill chicken for 5-6 minutes per side until cooked through.",
+        "Let rest for 2 minutes, then slice into strips.",
+        "Toast bread lightly. Spread mayo on bread.",
+        "Layer lettuce, tomato, chicken, and avocado.",
+        "Close sandwich and serve immediately.",
+      ],
     },
     {
       category: "Dinner",
       title: "Chicken Fried Rice",
       description:
-        "Stir-fried chicken with brown rice, mixed vegetables, eggs, and low-sodium soy sauce. Quick to prepare and loaded with balanced macros.",
+        "Stir-fried chicken with brown rice, mixed vegetables, eggs, and soy sauce.",
       icon: UtensilsCrossed,
       color: "from-amber-500 to-orange-600",
       cuisine: "American",
       ingredients: ["chicken", "rice", "eggs", "vegetables", "soy sauce"],
-    },
-    {
-      category: "Dinner",
-      title: "BBQ Grilled Chicken",
-      description:
-        "Marinated chicken breast grilled to perfection with sugar-free BBQ sauce. Serve with quinoa and roasted vegetables for a complete meal.",
-      icon: UtensilsCrossed,
-      color: "from-orange-600 to-red-600",
-      cuisine: "American",
-      ingredients: ["chicken", "bbq sauce", "quinoa", "vegetables"],
-    },
-    {
-      category: "Snack",
-      title: "Chicken Tenders with Hummus",
-      description:
-        "Baked chicken tenders (healthier than fried) served with hummus or Greek yogurt dip. Great high-protein snack or meal prep option.",
-      icon: UtensilsCrossed,
-      color: "from-blue-500 to-cyan-500",
-      cuisine: "American",
-      ingredients: ["chicken", "hummus", "yogurt"],
+      prepTime: "10 min",
+      cookTime: "15 min",
+      servings: "4",
+      fullIngredients: [
+        "1 lb chicken breast, diced",
+        "3 cups cooked brown rice (day old)",
+        "2 eggs, beaten",
+        "1 cup mixed vegetables (peas, carrots, corn)",
+        "3 tbsp low-sodium soy sauce",
+        "2 tbsp vegetable oil",
+        "2 cloves garlic, minced",
+        "½ tsp ginger",
+        "Green onions for garnish",
+      ],
+      steps: [
+        "Heat 1 tbsp oil in a wok or large skillet over high heat.",
+        "Cook diced chicken until golden, about 5-7 minutes. Remove and set aside.",
+        "Add remaining oil, scramble eggs, and set aside.",
+        "Stir-fry garlic and ginger for 30 seconds.",
+        "Add rice, breaking up clumps, and stir-fry for 3 minutes.",
+        "Add vegetables, chicken, and eggs back in.",
+        "Pour soy sauce over and toss well for 2 minutes.",
+        "Garnish with green onions and serve hot.",
+      ],
     },
   ];
 
@@ -126,61 +200,139 @@ export function AISuggestions() {
       category: "Dinner",
       title: "Butter Chicken (Murgh Makhani)",
       description:
-        "Tender chicken in a creamy tomato-based sauce with butter and cream. Serve with brown rice or naan. Rich in flavor with moderate spice levels.",
+        "Tender chicken in a creamy tomato-based sauce with butter and cream. Serve with brown rice or naan.",
       icon: UtensilsCrossed,
       color: "from-orange-500 to-red-600",
       cuisine: "Indian",
       ingredients: ["chicken", "butter", "cream", "tomato", "rice", "naan"],
+      prepTime: "15 min",
+      cookTime: "30 min",
+      servings: "4",
+      fullIngredients: [
+        "1.5 lbs chicken breast, cubed",
+        "4 tbsp butter",
+        "½ cup heavy cream",
+        "1 can (15 oz) tomato sauce",
+        "2 tbsp tomato paste",
+        "1 tbsp garam masala",
+        "1 tsp turmeric",
+        "1 tbsp paprika",
+        "3 cloves garlic, minced",
+        "1 tbsp ginger, minced",
+        "1 onion, diced",
+        "Salt and pepper to taste",
+      ],
+      steps: [
+        "Heat 2 tbsp butter in a large pan. Sauté onion, garlic, and ginger until fragrant.",
+        "Add chicken cubes and cook until golden on all sides (about 8 minutes). Remove chicken.",
+        "Add remaining butter and tomato paste to the pan. Cook for 1 minute.",
+        "Add tomato sauce, garam masala, turmeric, and paprika. Stir well.",
+        "Return chicken to the pan. Simmer for 15 minutes until cooked through.",
+        "Stir in heavy cream and cook for 2 more minutes.",
+        "Season with salt and pepper. Serve over rice or with naan.",
+      ],
     },
     {
       category: "Dinner",
       title: "Chicken Tikka Masala",
       description:
-        "Marinated chicken cooked in tandoor-style oven, served in a smooth coconut curry sauce. High protein with aromatic Indian spices like cumin and garam masala.",
+        "Marinated chicken cooked in tandoor-style, served in a smooth coconut curry sauce.",
       icon: UtensilsCrossed,
       color: "from-red-500 to-pink-600",
       cuisine: "Indian",
       ingredients: ["chicken", "yogurt", "coconut", "cumin", "garam masala", "tomato"],
+      prepTime: "20 min",
+      cookTime: "25 min",
+      servings: "4",
+      fullIngredients: [
+        "1.5 lbs chicken breast, cut into chunks",
+        "1 cup Greek yogurt",
+        "2 tbsp garam masala",
+        "1 tbsp cumin",
+        "1 tsp chili powder",
+        "1 can (14 oz) coconut milk",
+        "1 can (15 oz) tomato sauce",
+        "3 cloves garlic, minced",
+        "1 tbsp ginger, minced",
+        "2 tbsp oil",
+        "Salt to taste",
+      ],
+      steps: [
+        "Mix yogurt with 1 tbsp garam masala, cumin, chili powder. Marinate chicken for 15 minutes.",
+        "Heat oil in a large pan. Sauté garlic and ginger for 30 seconds.",
+        "Add marinated chicken and cook for 8-10 minutes until cooked through.",
+        "Add tomato sauce and remaining garam masala. Simmer for 5 minutes.",
+        "Stir in coconut milk and simmer for 5 more minutes.",
+        "Adjust seasonings and serve with rice.",
+      ],
     },
     {
       category: "Lunch",
       title: "Tandoori Grilled Chicken",
       description:
-        "Chicken marinated in yogurt and tandoori spices, then grilled to perfection. Lean protein option with bold Indian flavors. Serve with cucumber raita.",
+        "Chicken marinated in yogurt and tandoori spices, then grilled to perfection.",
       icon: UtensilsCrossed,
       color: "from-amber-600 to-orange-500",
       cuisine: "Indian",
       ingredients: ["chicken", "yogurt", "tandoori spice", "cucumber", "lime"],
+      prepTime: "15 min",
+      cookTime: "15 min",
+      servings: "4",
+      fullIngredients: [
+        "4 chicken breasts (1.5 lbs)",
+        "1 cup Greek yogurt",
+        "2 tbsp tandoori spice mix",
+        "1 tbsp lemon juice",
+        "1 tbsp ginger-garlic paste",
+        "1 tsp turmeric",
+        "Salt to taste",
+        "Oil for grilling",
+        "1 cucumber, sliced (for raita)",
+        "Fresh cilantro",
+      ],
+      steps: [
+        "Mix yogurt with tandoori spice, lemon juice, ginger-garlic paste, and turmeric.",
+        "Coat chicken with marinade. Let sit for at least 15 minutes (or up to 4 hours).",
+        "Preheat grill to medium-high. Oil the grates.",
+        "Grill chicken for 6-7 minutes per side until fully cooked and charred.",
+        "Let rest for 5 minutes. Serve with cucumber raita and lime wedges.",
+      ],
     },
     {
       category: "Dinner",
       title: "Spiced Chicken Curry",
       description:
-        "Tender chicken cooked in a rich curry sauce with turmeric, coriander, and fenugreek. Serve with basmati rice or roti. Packed with anti-inflammatory spices.",
+        "Tender chicken cooked in a rich curry sauce with turmeric and coriander.",
       icon: UtensilsCrossed,
       color: "from-yellow-600 to-orange-600",
       cuisine: "Indian",
       ingredients: ["chicken", "turmeric", "coriander", "rice", "onion", "garlic"],
-    },
-    {
-      category: "Lunch",
-      title: "Chicken Biryani",
-      description:
-        "Aromatic rice layered with spiced chicken, then slow-cooked together. Complete meal with carbs and protein in one dish. Flavored with saffron and cardamom.",
-      icon: UtensilsCrossed,
-      color: "from-amber-500 to-yellow-600",
-      cuisine: "Indian",
-      ingredients: ["chicken", "rice", "saffron", "cardamom", "onion", "yogurt"],
-    },
-    {
-      category: "Dinner",
-      title: "Chettinad Chicken Pepper Fry",
-      description:
-        "Chicken cooked with black pepper, coconut, and Indian spices. Dry preparation with intense flavors and minimal sauce. High protein, low carb option.",
-      icon: UtensilsCrossed,
-      color: "from-gray-700 to-orange-700",
-      cuisine: "Indian",
-      ingredients: ["chicken", "black pepper", "coconut", "curry leaves", "onion"],
+      prepTime: "10 min",
+      cookTime: "25 min",
+      servings: "4",
+      fullIngredients: [
+        "1.5 lbs chicken breast, cut into bite-size pieces",
+        "2 tbsp oil",
+        "2 onions, diced",
+        "4 cloves garlic, minced",
+        "1 tbsp ginger, minced",
+        "2 tsp turmeric",
+        "1 tsp coriander",
+        "1 tsp cumin",
+        "1 can (14 oz) coconut milk",
+        "1 cup chicken broth",
+        "2 tomatoes, diced",
+        "Salt and pepper to taste",
+      ],
+      steps: [
+        "Heat oil in a large pot. Sauté onions until golden.",
+        "Add garlic and ginger, cook for 1 minute.",
+        "Add turmeric, coriander, and cumin. Toast spices for 30 seconds.",
+        "Add chicken and cook until no longer pink (5-7 minutes).",
+        "Pour in coconut milk and broth. Add tomatoes.",
+        "Simmer for 15 minutes until chicken is tender. Season with salt and pepper.",
+        "Serve with basmati rice or naan.",
+      ],
     },
   ];
 
@@ -392,7 +544,7 @@ export function AISuggestions() {
           {currentMeals.map((suggestion, index) => {
             const Icon = suggestion.icon;
             return (
-              <Card key={index} className="hover:shadow-md transition-shadow">
+              <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
                     <div
@@ -410,13 +562,135 @@ export function AISuggestions() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">{suggestion.description}</p>
+                  <p className="text-gray-600 text-sm mb-4">{suggestion.description}</p>
+                  {suggestion.prepTime && (
+                    <div className="flex gap-4 text-xs text-gray-600 mb-4">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        <span>{suggestion.prepTime} prep</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        <span>{suggestion.cookTime} cook</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Users className="w-4 h-4" />
+                        <span>{suggestion.servings} servings</span>
+                      </div>
+                    </div>
+                  )}
+                  <Button
+                    onClick={() => setSelectedRecipe(suggestion)}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    View Full Recipe
+                  </Button>
                 </CardContent>
               </Card>
             );
           })}
         </div>
       </div>
+
+      {/* Recipe Detail Modal */}
+      {selectedRecipe && (
+        <Card className="bg-gradient-to-br from-slate-50 to-slate-100 border-2 border-blue-300">
+          <CardHeader>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-12 h-12 rounded-lg bg-gradient-to-br ${selectedRecipe.color} flex items-center justify-center`}
+                >
+                  <UtensilsCrossed className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl">{selectedRecipe.title}</CardTitle>
+                  <p className="text-sm text-gray-600">{selectedRecipe.cuisine} Cuisine</p>
+                </div>
+              </div>
+              <Button
+                onClick={() => setSelectedRecipe(null)}
+                variant="outline"
+                className="text-lg"
+              >
+                ✕
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Quick Info */}
+            <div className="flex gap-6 bg-white p-4 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-blue-600" />
+                <div>
+                  <p className="text-xs text-gray-600">Prep Time</p>
+                  <p className="font-semibold">{selectedRecipe.prepTime}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-green-600" />
+                <div>
+                  <p className="text-xs text-gray-600">Cook Time</p>
+                  <p className="font-semibold">{selectedRecipe.cookTime}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-purple-600" />
+                <div>
+                  <p className="text-xs text-gray-600">Servings</p>
+                  <p className="font-semibold">{selectedRecipe.servings}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Ingredients */}
+            {selectedRecipe.fullIngredients && (
+              <div className="bg-white p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3 text-gray-900">Ingredients</h3>
+                <ul className="space-y-2">
+                  {selectedRecipe.fullIngredients.map((ingredient, idx) => (
+                    <li key={idx} className="flex items-start gap-3 text-gray-700">
+                      <input
+                        type="checkbox"
+                        className="mt-1 w-4 h-4 cursor-pointer"
+                        id={`ingredient-${idx}`}
+                      />
+                      <label htmlFor={`ingredient-${idx}`} className="cursor-pointer flex-1">
+                        {ingredient}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Cooking Steps */}
+            {selectedRecipe.steps && (
+              <div className="bg-white p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3 text-gray-900">Cooking Steps</h3>
+                <ol className="space-y-3">
+                  {selectedRecipe.steps.map((step, idx) => (
+                    <li key={idx} className="flex gap-3">
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-semibold">
+                        {idx + 1}
+                      </span>
+                      <p className="text-gray-700 pt-1">{step}</p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+
+            <Button
+              onClick={() => setSelectedRecipe(null)}
+              className="w-full bg-blue-600 hover:bg-blue-700"
+            >
+              Close Recipe
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Workout Suggestions */}
       <div>
